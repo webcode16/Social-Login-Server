@@ -1,0 +1,43 @@
+<div id="g_id_onload"
+     data-client_id="107418337833-471puuf0rnarlsf595b1gs19o9rnavco.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-size="large"
+     data-theme="outline"
+     data-text="sign_in_with"
+     data-shape="rectangular"
+     data-logo_alignment="left">
+</div>
+<!-- <button id="login-btn">Sign in with Google</button> -->
+
+  <script>
+    const GOOGLE_CLIENT_ID = "107418337833-471puuf0rnarlsf595b1gs19o9rnavco.apps.googleusercontent.com"; // Replace this!
+
+    function handleCredentialResponse(response) {
+      const idToken = response.credential;
+
+      // Send ID token to your Express backend
+      fetch("http://localhost:3000/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: idToken })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          console.log("Login successful, redirecting...");
+          // window.location.href = data.redirectUrl; // e.g., https://yourstore.myshopify.com/account
+        } else {
+          alert("Login failed: " + data.error);
+        }
+      })
+      .catch(err => {
+        console.error("Error during login:", err);
+        alert("Something went wrong!");
+      });
+    }
+  </script>
